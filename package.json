@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@slack/bolt": "^4.6.1",
+    "dotenv": "^16.3.4"
+  },
+  "scripts": {
+    "start": "node SlackBot.js"
+  }
+}
