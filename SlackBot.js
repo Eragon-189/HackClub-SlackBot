@@ -1,7 +1,12 @@
 require("dotenv").config();
 const axios = require("axios");
-
+const { default: ModelClient, isUnexpected } = require("@azure-rest/ai-inference");
+const { AzureKeyCredential } = require("@azure/core-auth");
 const { App } = require("@slack/bolt");
+
+const token = process.env["GITHUB_TOKEN"];
+const endpoint = "https://models.github.ai/inference";
+const model = "deepseek/DeepSeek-V3-0324";
 
 const app = new App({//define the app with the tokens and socket mode
   token: process.env.BOT_TOKEN,
@@ -28,10 +33,39 @@ app.command("/mb-echo", async ({ command, ack, respond }) => {
 });
 app.command("/mb-ai", async ({ command, ack, respond }) => {
   await ack();
-  const out = "";
-  const text = command.text.toLowerCase();
-  const ai = text.split("-")[0];
-  const prompt = text.split("-")[1];
+  const prompt = command.text.toLowerCase();
+  let out;
+
+  try {
+    const response = await axios.post(
+      endpoint,
+      {
+        messages: [
+          { role: "user", content: prompt }
+        ],
+        temperature: 1.0,
+        top_p: 1.0,
+        max_tokens: 1000,
+        model: model
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    out = response.data.choices[0].message.content;
+  } catch (error) {
+    if (error.response) {
+      console.error("Error response:", error.response.data);
+    } else {
+      console.error("Error:", error.message);
+    }
+    out = `Sorry, there was an error processing your request.(Error: ${error.response.data})`;
+  }
+
   await respond({ text: `${out}` });
 });
 
