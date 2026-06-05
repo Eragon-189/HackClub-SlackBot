@@ -13,12 +13,15 @@ const app = new App({//define the app with the tokens and socket mode
   appToken: process.env.APP_TOKEN,
   socketMode: true
 });
+app.error((error) => {
+  console.error("Error in Slack app:", error);
+});
 //add command listeners for the bot(ping)
 app.command("/mb-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
   const latency = Date.now() - start;
-  await respond({ text: `Pong!\nLatency: ${latency}ms` });
+  await respond({ text: `Latency: ${latency}ms` });
 });
 //add command listeners for the bot(help)
 app.command("/mb-help", async ({ command, ack, respond }) => {
@@ -29,7 +32,8 @@ app.command("/mb-help", async ({ command, ack, respond }) => {
 app.command("/mb-echo", async ({ command, ack, respond }) => {
   await ack();
   const text = command.text;
-  await respond({ text: `${text}` });
+  console.log(`Echoing back: ${text}`);
+  await respond({ text: `pong! ${text}` });
 });
 app.command("/mb-ai", async ({ command, ack, respond }) => {
   await ack();
@@ -41,9 +45,9 @@ app.command("/mb-ai", async ({ command, ack, respond }) => {
       endpoint,
       {
         messages: [
-          { role: "user", content: prompt }
+          {role: "user", content: prompt }
         ],
-        temperature: 1.0,
+        temperature: 0.5,
         top_p: 1.0,
         max_tokens: 1000,
         model: model
