@@ -36,6 +36,7 @@ app.command("/eb-echo", async ({ command, ack, respond }) => {
   const text = command.text;
   await respond({ text: `${text}` });
 });
+//ai command listener for the bot, this will send the prompt to the azure endpoint and return the response from the model
 app.command("/eb-ai", async ({ command, ack, respond }) => {
   await ack();
   const prompt = command.text.toLowerCase();
