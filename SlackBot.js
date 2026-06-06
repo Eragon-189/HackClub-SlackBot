@@ -21,7 +21,6 @@ app.error((error) => {
 app.command("/eb-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
-  console.log(`pinging`);
   const latency = Date.now() - start;
   await respond({ text: `Latency: ${latency}ms` });
 });
