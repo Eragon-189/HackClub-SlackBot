@@ -16,26 +16,27 @@ const app = new App({//define the app with the tokens and socket mode
 app.error((error) => {
   console.error("Error in Slack app:", error);
 });
+
 //add command listeners for the bot(ping)
-app.command("/mb-ping", async ({ command, ack, respond }) => {
+app.command("/eb-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
+  console.log(`pinging`);
   const latency = Date.now() - start;
   await respond({ text: `Latency: ${latency}ms` });
 });
 //add command listeners for the bot(help)
-app.command("/mb-help", async ({ command, ack, respond }) => {
+app.command("/eb-help", async ({ command, ack, respond }) => {
   await ack();
   await respond({ text: "Here are the available commands:\n- `/mb-ping`: Check the bot's latency\n- `/mb-help`: Show this help message\n- `/mb-ai`: Interact with the AI" });
 });
 //add command listeners for the bot(echo)
-app.command("/mb-echo", async ({ command, ack, respond }) => {
+app.command("/eb-echo", async ({ command, ack, respond }) => {
   await ack();
   const text = command.text;
-  console.log(`Echoing back: ${text}`);
-  await respond({ text: `pong! ${text}` });
+  await respond({ text: `${text}` });
 });
-app.command("/mb-ai", async ({ command, ack, respond }) => {
+app.command("/eb-ai", async ({ command, ack, respond }) => {
   await ack();
   const prompt = command.text.toLowerCase();
   let out;
