@@ -1,5 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
+
 const { default: ModelClient, isUnexpected } = require("@azure-rest/ai-inference");
 const { AzureKeyCredential } = require("@azure/core-auth");
 const { App } = require("@slack/bolt");
@@ -16,6 +17,37 @@ const app = new App({//define the app with the tokens and socket mode
 app.error((error) => {
   console.error("Error in Slack app:", error);
 });
+async function AI(prompt) {
+try {
+  const client = ModelClient(
+    endpoint,
+    new AzureKeyCredential(token),
+  );
+
+  const response = await client.path("/chat/completions").post({
+    body: {
+      messages: [
+        { role:"system", content: "Answer everything as best you can." },
+        { role:"user", content: prompt }
+      ],
+      temperature: 0.8,
+      top_p: 0.1,
+      max_tokens: 2048,
+      model: model
+    }
+  });
+  console.log("Response from Azure endpoint:", response);
+  const text = response.body.choices[0].message.content;
+  console.log("output:", text);
+  return text;
+  } catch (error) {
+    if (error.response) {
+      console.error("Error response:", error.response.data);
+    } else {
+      console.error("Error:", error.message);
+    }
+  }
+}
 
 //add command listeners for the bot(ping)
 app.command("/eb-ping", async ({ command, ack, respond }) => {
@@ -39,38 +71,7 @@ app.command("/eb-echo", async ({ command, ack, respond }) => {
 app.command("/eb-ai", async ({ command, ack, respond }) => {
   await ack();
   const prompt = command.text.toLowerCase();
-  let out;
-
-  try {
-    const response = await axios.post(
-      endpoint,
-      {
-        messages: [
-          {role: "user", content: prompt }
-        ],
-        temperature: 0.5,
-        top_p: 1.0,
-        max_tokens: 1000,
-        model: model
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
-    out = response.data.choices[0].message.content;
-  } catch (error) {
-    if (error.response) {
-      console.error("Error response:", error.response.data);
-    } else {
-      console.error("Error:", error.message);
-    }
-    out = `Sorry, there was an error processing your request.(Error: ${error.response.data})`;
-  }
-
+  const out = await AI(prompt);
   await respond({ text: `${out}` });
 });
 
