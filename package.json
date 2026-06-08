@@ -9,6 +9,5 @@
   },
   "scripts": {
     "start": "node SlackBot.js",
-    "dev": "node temp.js"
   }
 }
