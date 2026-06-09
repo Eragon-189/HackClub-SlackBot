@@ -48,12 +48,11 @@ try {
   }
 }
 
-function CorrectModelName(model) {
+function CorrectModelName(model) {//check if model is valid and return correct model name for azure endpoint
 
 
 if (model === "ds-v3" || model === "deepseek-v3") {//make model abrv into model name for azure endpoint 
     model = "deepseek/DeepSeek-V3-0324"
-
   }else if (model === "ms-3.1" || model === "mistral-small-3.1") {
     model = "mistral-ai/mistral-small-2503"
 
