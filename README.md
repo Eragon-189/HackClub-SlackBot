@@ -11,5 +11,5 @@ A slackbot to help you(with ai) hosted on nest
 * /mb-ai {model} | {promp} - API an ai and return its response
 <br>
 ## How it works
-uses Slack Bolt and webSocket to take in comands from slack. Then I used axios to API github models.
+uses Slack Bolt and webSocket to take in comands from slack. Then I used axios to API github models. I also used cron on nest to git pull weekly.
 
