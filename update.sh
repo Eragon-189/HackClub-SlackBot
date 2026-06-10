@@ -1,3 +1,3 @@
 #!/bin/bash
-origin = "https://github.com/Eragon-189/HackClub-SlackBot.git"
-git pull $origin
+cd /root/HackClub-SlackBot
+git pull https://github.com/Eragon-189/HackClub-SlackBot.git
