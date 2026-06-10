@@ -97,6 +97,10 @@ app.command("/eb-ai", async ({ command, ack, respond }) => {
 
   const correctModel = CorrectModelName(model)//check if model is valid and get correct model name for azure endpoint
 
+  if (correctModel === "") {//if model is not valid return error
+    await respond({ text: `Invalid model name. Please use one of the following: ds-v3, ms-3.1, mm-3` });
+    return;
+  }
   const out = await AI(prompt, correctModel);//send prompt and model to AI function and return response
   await respond({ text: `${out}` });//return response from model to slack
 
