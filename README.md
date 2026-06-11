@@ -2,7 +2,7 @@
 A slackbot to help you(with ai) hosted on nest
 <br>
 ## How to use
-* open [this link](https://hackclub.enterprise.slack.com/archives/C0B8ZP1DZFV)
+* open [this link](https://hackclub.enterprise.slack.com/archives/C0B8ZP1DZFV) to open the hack club slack channel #eragon189s-bot 
 <br>
 ## Curent comands
 * /mb-ping - returns latency between you and bot
@@ -11,5 +11,5 @@ A slackbot to help you(with ai) hosted on nest
 * /mb-ai {model} | {promp} - API an ai and return its response
 <br>
 ## How it works
-uses Slack Bolt and webSocket to take in comands from slack. Then I used axios to API github models. I also used cron on nest to git pull weekly.
+Uses Slack Bolt and webSocket to take in comands from slack. Then I used axios to API github models. I also used cron on nest to git pull weekly keeping it updated.
 
